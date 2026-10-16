@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atur Ulang Password | BarFin</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:linear-gradient(135deg,#3B82F6,#4F46E5);padding:20px}
+  .card{background:#fff;border-radius:20px;max-width:420px;width:100%;
+    padding:36px 28px;text-align:center;box-shadow:0 20px 50px rgba(30,58,138,.3)}
+  .icon{width:72px;height:72px;border-radius:22px;margin:0 auto 20px;
+    background:linear-gradient(135deg,#3B82F6,#4F46E5);display:flex;
+    align-items:center;justify-content:center;font-size:34px;color:#fff}
+  h1{font-size:22px;color:#172033;margin-bottom:12px}
+  p{font-size:15px;line-height:1.6;color:#475569;margin-bottom:10px}
+  .btn{display:inline-block;margin-top:16px;padding:14px 28px;border-radius:12px;
+    background:linear-gradient(135deg,#3B82F6,#4F46E5);color:#fff;font-weight:600;
+    text-decoration:none;font-size:15px}
+  .hidden{display:none}
+  footer{margin-top:28px;font-size:12px;color:#94A3B8}
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="icon" id="icon">🔑</div>
+
+  <section id="mobile" class="hidden">
+    <h1>Buka aplikasi BarFin</h1>
+    <p>Ketuk tombol di bawah untuk membuat password baru di aplikasi BarFin.</p>
+    <a id="openApp" class="btn" href="#">Buka aplikasi BarFin</a>
+    <p style="margin-top:16px;font-size:13px;color:#64748B">Jika aplikasi tidak terbuka, pastikan kamu membuka tautan ini di HP yang sama dengan yang dipakai meminta reset password.</p>
+  </section>
+
+  <section id="desktop" class="hidden">
+    <h1>Buka tautan ini dari HP</h1>
+    <p>Reset password hanya bisa diselesaikan di aplikasi BarFin pada HP tempat kamu meminta reset.</p>
+    <p>Buka email ini dari HP kamu, lalu ketuk tautannya. Jika tautan sudah terbuka di komputer, tautan itu tidak berlaku lagi. Minta tautan baru lewat <b>Lupa Password</b> di aplikasi BarFin.</p>
+  </section>
+
+  <section id="error" class="hidden">
+    <h1>Tautan tidak berlaku</h1>
+    <p>Tautan reset sudah kedaluwarsa atau sudah pernah dipakai. Buka aplikasi BarFin, pilih <b>Lupa Password</b>, lalu minta tautan baru.</p>
+  </section>
+
+  <footer>© 2026 BarFin • Created by Albar Syahrurrachman</footer>
+</main>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var h = new URLSearchParams(location.hash.replace(/^#/, ''));
+  var code = q.get('code');
+  var hasError = q.get('error') || h.get('error') || h.get('error_code') || q.get('error_code');
+  var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  function show(id) { document.getElementById(id).classList.remove('hidden'); }
+
+  if (hasError || !code) { show('error'); return; }
+  if (!isMobile) { show('desktop'); return; }
+
+  var link = 'barfin://reset-password?code=' + encodeURIComponent(code);
+  document.getElementById('openApp').setAttribute('href', link);
+  show('mobile');
+  setTimeout(function () { window.location.href = link; }, 400);
+})();
+</script>
+</body>
+</html>
